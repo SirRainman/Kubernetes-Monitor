@@ -1,0 +1,60 @@
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: node-exporter
+spec:
+  selector:
+    matchLabels: 
+      app: prometheus
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9100'
+        prometheus.io/path: 'metrics'
+      labels:
+        app: prometheus
+        component: node-exporter
+    spec:
+      containers:
+      - image: prom/node-exporter
+        imagePullPolicy: IfNotPresent
+        name: node-exporter
+        ports:
+        - containerPort: 9100
+          protocol: TCP
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: prometheus
+    component: node-exporter
+  name: node-exporter
+  namespace: monitoring
+spec:
+  ports:
+  - name: http
+    port: 9100
+    nodePort: 31234
+    protocol: TCP
+  type: NodePort
+  selector:
+    app: prometheus
+    component: node-exporter

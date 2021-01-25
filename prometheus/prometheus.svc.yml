@@ -1,0 +1,20 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/app-metrics: 'true'
+    prometheus.io/app-metrics-path: '/metrics'
+  labels:
+    app: prometheus
+  name: prometheus
+  namespace: monitoring
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30003
+  selector:
+    app: prometheus
