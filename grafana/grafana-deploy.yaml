@@ -17,11 +17,11 @@ spec:
         app: grafana
         component: core
     spec:
-      # securityContext:
-      #     runAsUser: 472
-      #     fsGroup: 472
+      securityContext:
+        runAsUser: 472
+        fsGroup: 472
       containers:
-      - image: grafana/grafana:5.0.0
+      - image: grafana/grafana:7.1.0
         name: grafana-core
         imagePullPolicy: IfNotPresent
         # env:
@@ -45,8 +45,14 @@ spec:
             value: "none"
           - name: GF_SECURITY_ALLOW_EMBEDDING
             value: "true"
-          # - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-          #   value: Admin
+          # - name: GF_SECURITY_ADMIN_USER
+          #   value: admin
+          # - name: GF_SECURITY_ADMIN_PASSWORD
+          #   value: admin321
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "true"
+          - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+            value: Admin
           # does not really work, because of template variables in exported dashboards:
           # - name: GF_DASHBOARDS_JSON_ENABLED
           #   value: "true"
@@ -56,17 +62,55 @@ spec:
             port: 3000
           # initialDelaySeconds: 30
           # timeoutSeconds: 1
-        # volumeMounts:
-        # - name: grafana-persistent-storage
-        #   mountPath: /var
         volumeMounts:
-        - mountPath: /var/lib/grafana # pod下的目录
-          name: storage
+        - name: grafana-persistent-storage
+          mountPath: /var/lib/grafana
+          subPath: grafana
+        # volumeMounts:
+        # - mountPath: /var/lib/grafana # pod下的目录
+        #   name: storage
+
+      # initContainers:
+      # - name: "init-chown-data"
+      #   image: "busybox:latest"
+      #   imagePullPolicy: IfNotPresent
+      #   command: ["chown", "-R", "472:472", "/var/lib/grafana"]
+      #   volumeMounts: 
+      #     - name: grafana-persistent-storage
+      #       mountPath: /var/lib/grafana
+      #       subPath: grafana
+
+      volumes:
+      - name: grafana-persistent-storage
+        persistentVolumeClaim:
+          claimName: grafana-pvc
       # volumes:
-      # - name: grafana-persistent-storage
-      #   emptyDir: {}
+      # - name: storage
+      #   hostPath:
+      #     path: /home/ubuntu/grafana_data  #宿主机path
+      #     type: DirectoryOrCreate
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: grafana-chown
+  namespace: monitoring
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: grafana-chown
+        command: ["chown", "-R", "472:472", "/var/lib/grafana"]
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: storage
+          subPath: grafana
+          mountPath: /var/lib/grafana
       volumes:
       - name: storage
-        hostPath:
-          path: /grafana_data/  #宿主机path
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: grafana-pvc

@@ -43,6 +43,8 @@ kind: Service
 metadata:
   annotations:
     prometheus.io/scrape: 'true'
+    prometheus.io/app-metrics: 'true'
+    prometheus.io/app-metrics-path: '/metrics'
   labels:
     app: prometheus
     component: node-exporter
@@ -52,6 +54,7 @@ spec:
   ports:
   - name: http
     port: 9100
+    targetPort: 9100
     nodePort: 31234
     protocol: TCP
   type: NodePort
