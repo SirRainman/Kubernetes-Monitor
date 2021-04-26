@@ -53,8 +53,12 @@ spec:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
-  hostPath:
+  # hostPath:
+  #   path: "/home/ubuntu/grafana_data_test"
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
     path: "/home/ubuntu/grafana_data"
+    server: 10.176.14.37
 
 ---
 

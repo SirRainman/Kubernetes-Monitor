@@ -21,7 +21,7 @@ spec:
         runAsUser: 472
         fsGroup: 472
       containers:
-      - image: grafana/grafana:7.1.0
+      - image: grafana/grafana
         name: grafana-core
         imagePullPolicy: IfNotPresent
         # env:
@@ -39,20 +39,18 @@ spec:
             value: "true"
           - name: GF_AUTH_ANONYMOUS_ENABLED
             value: "true"
-          - name: GF_SECURITY_COOKIE_SECURE
-            value: "true"
-          - name: GF_SECURITY_COOKIE_SAMESITE
-            value: "none"
-          - name: GF_SECURITY_ALLOW_EMBEDDING
-            value: "true"
-          # - name: GF_SECURITY_ADMIN_USER
-          #   value: admin
-          # - name: GF_SECURITY_ADMIN_PASSWORD
-          #   value: admin321
-          - name: GF_AUTH_ANONYMOUS_ENABLED
-            value: "true"
           - name: GF_AUTH_ANONYMOUS_ORG_ROLE
             value: Admin
+          # - name: GF_SECURITY_COOKIE_SECURE
+            # value: "true"
+          # - name: GF_SECURITY_COOKIE_SAMESITE
+            # value: "none"
+          - name: GF_SECURITY_ALLOW_EMBEDDING
+            value: "true"
+          - name: GF_SECURITY_ADMIN_USER
+            value: admin
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: admin321
           # does not really work, because of template variables in exported dashboards:
           # - name: GF_DASHBOARDS_JSON_ENABLED
           #   value: "true"

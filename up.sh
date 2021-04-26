@@ -30,13 +30,13 @@ function networkUp() {
 # Tear down running network
 function networkDown() {
 	# node-exporter
-    kubectl delete -f ./node-exporter.yaml
+        kubectl delete -f ./node-exporter.yaml --grace-period=0 --force
 	
 	# kube-state-metrics
-	kubectl delete -f ./kube-state-metrics
+	kubectl delete -f ./kube-state-metrics --grace-period=0 --force
 	
 	# prometheus
-	kubectl delete -f ./prometheus
+	kubectl delete -f ./prometheus --grace-period=0 --force
 	# kubectl delete -f ./prometheus/blackbox-exporter.yaml
 	# kubectl delete -f ./prometheus/rbac-setup.yaml
 	# kubectl delete -f ./prometheus/configmap.yaml
@@ -45,7 +45,7 @@ function networkDown() {
 
 
 	# grafana
-	kubectl delete -f ./grafana
+	kubectl delete -f ./grafana --grace-period=0 --force
 	# kubectl delete -f ./grafana/grafana-svc.yaml
 	# kubectl delete -f ./grafana/grafana-ing.yaml
 	# kubectl delete -f ./grafana/grafana-volume.yaml
