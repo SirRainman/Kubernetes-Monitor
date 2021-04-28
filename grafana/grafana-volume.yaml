@@ -57,7 +57,7 @@ spec:
   #   path: "/home/ubuntu/grafana_data_test"
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: "/home/ubuntu/grafana_data"
+    path: "/home/ubuntu/k8s-prometheus-grafana/grafana/grafana_data"
     server: 10.176.14.37
 
 ---

@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
       - image: prom/prometheus
+        imagePullPolicy: IfNotPresent
         name: prometheus
         command:
         - "/bin/prometheus"
