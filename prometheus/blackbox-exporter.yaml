@@ -33,6 +33,8 @@ spec:
       labels:
         app: blackbox-exporter
     spec:
+      nodeSelector: 
+        labelName: bigmaster
       containers:
       - image: prom/blackbox-exporter
         imagePullPolicy: IfNotPresent

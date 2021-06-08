@@ -19,7 +19,7 @@ data:
       static_configs:
       # 采集所有主机的信息，要更新服务器的ip地址
       - targets:
-        - "10.176.14.37:31234"
+        - "103.10.85.173:31234"
     # - job_name: 'kubernetes-node-exporter'
     #   kubernetes_sd_configs:
     #   - role: endpoints

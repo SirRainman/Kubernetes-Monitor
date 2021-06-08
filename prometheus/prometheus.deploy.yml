@@ -16,6 +16,8 @@ spec:
       labels:
         app: prometheus
     spec:
+      nodeSelector: 
+        labelName: bigmaster
       containers:
       - image: prom/prometheus
         imagePullPolicy: IfNotPresent

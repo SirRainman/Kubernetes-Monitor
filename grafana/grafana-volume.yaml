@@ -50,15 +50,15 @@ metadata:
     name: grafana-volume
 spec:
   capacity:
-    storage: 10Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   # hostPath:
   #   path: "/home/ubuntu/grafana_data_test"
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: "/home/ubuntu/k8s-prometheus-grafana/grafana/grafana_data"
-    server: 10.176.14.37
+    path: "/root/Kubernetes-Monitor/grafana/grafana_data"
+    server: 103.10.85.173
 
 ---
 
